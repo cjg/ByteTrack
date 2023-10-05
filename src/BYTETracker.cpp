@@ -1,8 +1,7 @@
 #include "BYTETracker.h"
 #include <fstream>
 
-BYTETracker::BYTETracker(int frame_rate, int track_buffer)
-{
+BYTETracker::BYTETracker(int frame_rate, int track_buffer, int removed_tracks_ttl_ms) {
 	track_thresh = 0.5;
 	high_thresh = 0.6;
 	match_thresh = 0.8;
@@ -10,6 +9,9 @@ BYTETracker::BYTETracker(int frame_rate, int track_buffer)
 	frame_id = 0;
 	max_time_lost = int(frame_rate / 30.0 * track_buffer);
 	cout << "Init ByteTrack!" << endl;
+  auto frame_duration_ms = 1000.0 / (double) frame_rate;
+  removed_tracks_ttl_frames = (int) round(removed_tracks_ttl_ms / frame_duration_ms);
+
 }
 
 BYTETracker::~BYTETracker()
@@ -237,5 +239,11 @@ vector<STrack> BYTETracker::update(const vector<Object>& objects)
 			output_stracks.push_back(this->tracked_stracks[i]);
 		}
 	}
+
+    this->removed_stracks.erase(std::remove_if(this->removed_stracks.begin(), this->removed_stracks.end(),
+                                               [&](const STrack & track) {
+                                                 return this->frame_id - track.frame_id > removed_tracks_ttl_frames;
+                                }), this->removed_stracks.end());
+
 	return output_stracks;
 }

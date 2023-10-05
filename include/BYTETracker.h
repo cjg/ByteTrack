@@ -12,7 +12,7 @@ struct Object
 class BYTETracker
 {
 public:
-	BYTETracker(int frame_rate = 30, int track_buffer = 30);
+  BYTETracker(int frame_rate = 30, int track_buffer = 30, int removed_tracks_ttl_ms = 3000);
 	~BYTETracker();
 
 	vector<STrack> update(const vector<Object>& objects);
@@ -41,6 +41,7 @@ private:
 	float match_thresh;
 	int frame_id;
 	int max_time_lost;
+    int removed_tracks_ttl_frames;
 
 	vector<STrack> tracked_stracks;
 	vector<STrack> lost_stracks;
