@@ -36,7 +36,6 @@ int main(int argc, const char **argv) {
       }
       people.push_back(Object{
           .rect=cv::Rect2f(object["x"], object["y"], object["width"], object["height"]),
-          .label=object["classIndex"],
           .prob=object["score"],
       });
     }

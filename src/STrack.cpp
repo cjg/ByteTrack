@@ -1,5 +1,7 @@
 #include "STrack.h"
 
+using std::vector;
+
 STrack::STrack(vector<float> tlwh_, float score)
 {
 	_tlwh.resize(4);

@@ -15,6 +15,7 @@ FetchContent_MakeAvailable(json)
 include_directories(include ${OpenCV_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIR})
 
 add_library(ByteTrack
+        include/BYTETracker.h
         src/BYTETracker.cpp
         src/STrack.cpp
         src/kalmanFilter.cpp
