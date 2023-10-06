@@ -3,7 +3,10 @@
 #include "STrack.h"
 
 struct Object {
-  cv::Rect_<float> rect;
+  float x;
+  float y;
+  float width;
+  float height;
   float prob;
 };
 

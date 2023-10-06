@@ -19,7 +19,7 @@ int main(int argc, const char **argv) {
   cv::VideoCapture vc(argv[1]);
   auto fps = (int) round(vc.get(cv::CAP_PROP_FPS));
   std::cout << "Video FPS: " << fps << std::endl;
-  auto delay = (int) round(1000.0 / vc.get(cv::CAP_PROP_FPS));
+  auto delay = (int) round(1000.0/vc.get(cv::CAP_PROP_FPS));
 
   std::ifstream ifs(argv[2]);
   auto detections = nlohmann::json::parse(ifs);
@@ -35,12 +35,15 @@ int main(int argc, const char **argv) {
         continue;
       }
       people.push_back(Object{
-          .rect=cv::Rect2f(object["x"], object["y"], object["width"], object["height"]),
+          .x=object["x"],
+          .y=object["y"],
+          .width=object["width"],
+          .height=object["height"],
           .prob=object["score"],
       });
     }
     auto tracks = tracker.update(people);
-    for (const auto & track : tracks) {
+    for (const auto &track : tracks) {
       auto color = tracker.get_color(track.track_id);
       cv::rectangle(frame, cv::Rect(track.tlwh[0], track.tlwh[1], track.tlwh[2], track.tlwh[3]),
                     color, 2);

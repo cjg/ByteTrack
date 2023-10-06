@@ -43,10 +43,10 @@ vector<STrack> BYTETracker::update(const vector<Object> &objects) {
     for (int i = 0; i < objects.size(); i++) {
       vector<float> tlbr_;
       tlbr_.resize(4);
-      tlbr_[0] = objects[i].rect.x;
-      tlbr_[1] = objects[i].rect.y;
-      tlbr_[2] = objects[i].rect.x + objects[i].rect.width;
-      tlbr_[3] = objects[i].rect.y + objects[i].rect.height;
+      tlbr_[0] = objects[i].x;
+      tlbr_[1] = objects[i].y;
+      tlbr_[2] = objects[i].x + objects[i].width;
+      tlbr_[3] = objects[i].y + objects[i].height;
 
       float score = objects[i].prob;
 
