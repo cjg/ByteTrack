@@ -1,6 +1,8 @@
 #include "BYTETracker.h"
 #include "lapjv.h"
 
+#include <map>
+
 using std::max;
 using std::map;
 using std::min;
@@ -11,7 +13,7 @@ class Exception : public std::exception {
  public:
   explicit Exception(const std::string &message) : message_(message) {}
 
-  const char *what() const _NOEXCEPT override {
+  const char *what() const noexcept override {
     return message_.c_str();
   }
 
@@ -362,7 +364,11 @@ double BYTETracker::lapjv(const vector<vector<float> > &cost, vector<int> &rowso
   return opt;
 }
 
-cv::Scalar BYTETracker::get_color(int idx) {
+RGB BYTETracker::get_color(int idx) {
   idx += 3;
-  return cv::Scalar(37*idx%255, 17*idx%255, 29*idx%255);
+  RGB rgb;
+  rgb.R = 29*idx%255;
+  rgb.G = 17*idx%255;
+  rgb.B = 37*idx%255;
+  return rgb;
 }

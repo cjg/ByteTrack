@@ -10,13 +10,19 @@ struct Object {
   float prob;
 };
 
+struct RGB {
+    int R;
+    int G;
+    int B;
+};
+
 class BYTETracker {
  public:
   explicit BYTETracker(int frame_rate = 30, int track_buffer = 30, int removed_tracks_ttl_ms = 3000);
   ~BYTETracker();
 
   std::vector<STrack> update(const std::vector<Object> &objects);
-  cv::Scalar get_color(int idx);
+  RGB get_color(int idx);
 
  private:
   std::vector<STrack *> joint_stracks(std::vector<STrack *> &tlista, std::vector<STrack> &tlistb);
