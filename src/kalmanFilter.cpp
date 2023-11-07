@@ -3,18 +3,6 @@
 
 namespace byte_kalman
 {
-	const double KalmanFilter::chi2inv95[10] = {
-	0,
-	3.8415,
-	5.9915,
-	7.8147,
-	9.4877,
-	11.070,
-	12.592,
-	14.067,
-	15.507,
-	16.919
-	};
 	KalmanFilter::KalmanFilter()
 	{
 		int ndim = 4;
@@ -120,33 +108,5 @@ namespace byte_kalman
 		KAL_MEAN new_mean = (mean.array() + tmp.array()).matrix();
 		KAL_COVA new_covariance = covariance - kalman_gain * projected_cov*(kalman_gain.transpose());
 		return std::make_pair(new_mean, new_covariance);
-	}
-
-	Eigen::Matrix<float, 1, -1>
-		KalmanFilter::gating_distance(
-			const KAL_MEAN &mean,
-			const KAL_COVA &covariance,
-			const std::vector<DETECTBOX> &measurements,
-			bool only_position)
-	{
-		KAL_HDATA pa = this->project(mean, covariance);
-		if (only_position) {
-			printf("not implement!");
-			exit(0);
-		}
-		KAL_HMEAN mean1 = pa.first;
-		KAL_HCOVA covariance1 = pa.second;
-
-		//    Eigen::Matrix<float, -1, 4, Eigen::RowMajor> d(size, 4);
-		DETECTBOXSS d(measurements.size(), 4);
-		int pos = 0;
-		for (DETECTBOX box : measurements) {
-			d.row(pos++) = box - mean1;
-		}
-		Eigen::Matrix<float, -1, -1, Eigen::RowMajor> factor = covariance1.llt().matrixL();
-		Eigen::Matrix<float, -1, -1> z = factor.triangularView<Eigen::Lower>().solve<Eigen::OnTheRight>(d).transpose();
-		auto zz = ((z.array())*(z.array())).matrix();
-		auto square_maha = zz.colwise().sum();
-		return square_maha;
 	}
 }
