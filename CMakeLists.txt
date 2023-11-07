@@ -9,7 +9,7 @@ option(BUILD_EXAMPLES "Build examples (requires OpenCV)" OFF)
 
 find_package(Eigen3 REQUIRED)
 
-include_directories(include ${OpenCV_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIR})
+#include_directories(include)
 
 add_library(ByteTrack
         include/BYTETracker.h
@@ -18,6 +18,23 @@ add_library(ByteTrack
         src/kalmanFilter.cpp
         src/lapjv.cpp
         src/utils.cpp)
+
+target_include_directories(${PROJECT_NAME} PUBLIC
+        ${EIGEN3_INCLUDE_DIR}
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>
+        $<INSTALL_INTERFACE:include>
+)
+install(TARGETS ${PROJECT_NAME}
+        EXPORT ${PROJECT_NAME}-config)
+install(EXPORT ${PROJECT_NAME}-config
+        NAMESPACE ${PROJECT_NAME}::
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+install(FILES
+        ${CMAKE_CURRENT_LIST_DIR}/include/BYTETracker.h
+        ${CMAKE_CURRENT_LIST_DIR}/include/kalmanFilter.h
+        ${CMAKE_CURRENT_LIST_DIR}/include/lapjv.h
+        ${CMAKE_CURRENT_LIST_DIR}/include/STrack.h
+        TYPE INCLUDE)
 
 if (BUILD_EXAMPLES)
     find_package(OpenCV REQUIRED)
